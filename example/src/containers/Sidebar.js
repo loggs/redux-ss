@@ -1,6 +1,6 @@
-import React from "react"
-import { connect } from "react-redux"
-import PropTypes from "prop-types"
+import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 const Sidebar = ({ users }) => (
   <aside id="sidebar" className="sidebar">
@@ -10,15 +10,18 @@ const Sidebar = ({ users }) => (
       ))}
     </ul>
   </aside>
-)
+);
 
 Sidebar.propTypes = {
   users: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired
     }).isRequired
   ).isRequired
-}
+};
 
-export default connect(({ users }) => ({ users }), null)(Sidebar)
+export default connect(
+  ({ users }) => ({ users }),
+  null
+)(Sidebar);
