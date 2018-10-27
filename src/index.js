@@ -3,8 +3,7 @@ import PropTypes from "prop-types";
 
 import styles from "./styles.css";
 
-export default class HelloWorld extends Component {
-  render() {
-    return <div>Hello world!</div>;
-  }
-}
+export const simpleMiddleWare = store => next => action => {
+  console.log("This is the action", action);
+  next(action);
+};
