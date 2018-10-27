@@ -5,11 +5,16 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "chance": "^1.0.16",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-redux": "^5.1.0",
     "react-scripts": "^1.1.4",
-    "redux-ss": "file:.."
+    "redux": "^4.0.1",
+    "redux-saga": "^0.16.2",
+    "redux-ss": "file:..",
+    "ws": "^6.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
