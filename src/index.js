@@ -11,13 +11,15 @@ export const socket = url => {
   const s = WebSocket(url);
 
   // Send incoming socket events to the reducer
-  s.onmessage = event => {
-    const action = JSON.parse(event.data);
-    dispatch(action);
-  };
+  return store => {
+    s.onmessage = event => {
+      const action = JSON.parse(event.data);
+      store.dispatch(action);
+    };
 
-  // Return this instance of the socket
-  return s;
+    // Return this instance of the socket
+    return s;
+  };
 };
 
 /*
@@ -25,6 +27,7 @@ export const socket = url => {
 */
 export const socketMiddleware = store => next => action => {
   console.log("This is the action", action);
+
   next(action);
 };
 
