@@ -4,31 +4,58 @@ import PropTypes from "prop-types";
 import styles from "./styles.css";
 
 /*
-  init state with { socket: socket(url) }
+  Class to manage any websocket connection
 */
-export const socket = url => {
-  // Create the socket
-  const s = WebSocket(url);
+class SocketStore {
+  /*
+    Key is url, the valu is the socket
+  */
+  sockets = {};
+  /*
+    This is the most recently added socket. Will use for any default actions
+  */
+  defaultUrl = "";
 
-  // Send incoming socket events to the reducer
-  return store => {
-    s.onmessage = event => {
+  getSocket(url) {
+    return this.sockets[url];
+  }
+
+  getDefaultSocket() {
+    return this.sockets[this.defaultUrl];
+  }
+
+  setDefaultSocket(url) {
+    this.defaultUrl = url;
+  }
+
+  addSocket(url, dispatch) {
+    // Create socket with onmessage action
+    const socket = new WebSocket(url);
+    socket.onmessage = event => {
       const action = JSON.parse(event.data);
-      store.dispatch(action);
+      dispatch(action);
     };
 
-    // Return this instance of the socket
-    return s;
-  };
-};
+    // Set the default url to the most recently added
+    this.defaultUrl = url;
+  }
+}
+
+// Create the socket store
+const socketStore = new SocketStore();
+
+// Create a reference to the default socket
+export const socket = socketStore.getDefaultSocket();
 
 /*
   capture any socketed requests by the middleware and send to the socket
 */
 export const socketMiddleware = store => next => action => {
-  console.log("This is the action", action);
-
   next(action);
+};
+
+export const socketCreate = url => store => {
+  socketStore.addSocket(url, store.dispatch);
 };
 
 /*

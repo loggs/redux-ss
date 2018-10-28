@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
-import { simpleMiddleWare, socket } from "redux-ss";
+import { socketMiddleWare, socketCreate } from "redux-ss";
 
 import "./index.css";
 import App from "./App";
@@ -14,11 +14,9 @@ import username from "./name";
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
-  reducers,
-  { socket: socket("ws://localhost:8989") },
-  applyMiddleware(socketMiddleware)
-);
+const store = createStore(reducers, applyMiddleware(socketMiddleware));
+
+socketCreate("ws://localhost:8989", store);
 
 ReactDOM.render(
   <Provider store={store}>
