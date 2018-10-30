@@ -4,61 +4,39 @@ import PropTypes from "prop-types";
 import styles from "./styles.css";
 
 /*
-  Class to manage any websocket connection
+  This will be an identifier for the web socket action
 */
-class SocketStore {
-  /*
-    Key is url, the valu is the socket
-  */
-  sockets = {};
-  /*
-    This is the most recently added socket. Will use for any default actions
-  */
-  defaultUrl = "";
-
-  getSocket(url) {
-    return this.sockets[url];
-  }
-
-  getDefaultSocket() {
-    return this.sockets[this.defaultUrl];
-  }
-
-  setDefaultSocket(url) {
-    this.defaultUrl = url;
-  }
-
-  addSocket(url, dispatch) {
-    // Create socket with onmessage action
-    const socket = new WebSocket(url);
-    socket.onmessage = event => {
-      const action = JSON.parse(event.data);
-      dispatch(action);
-    };
-
-    // Set the default url to the most recently added
-    this.defaultUrl = url;
-  }
-}
-
-// Create the socket store
-const socketStore = new SocketStore();
-
-// Create a reference to the default socket
-export const socket = socketStore.getDefaultSocket();
+const SOCKET_STRING = "socket";
 
 /*
-  capture any socketed requests by the middleware and send to the socket
+  Create socket - takes a websocket url and a dispatch method
+  and returns a socket
 */
-export const socketMiddleware = store => next => action => {
-  next(action);
-};
+const createSocket = (url, dispatch) => {
+  const s = new WebSocket(url);
 
-export const socketCreate = url => store => {
-  socketStore.addSocket(url, store.dispatch);
+  s.onmessage = event => {
+    const action = JSON.parse(event.data);
+    dispatch(action);
+  };
+
+  return s;
 };
 
 /*
   Create a specific wrapper for a type to define a socketed type
 */
-const SEND_SOCKET = type => `socket/${type}`;
+export const SEND_SOCKET = type => `${SOCKET_STRING}/${type}`;
+
+/*
+  capture any socketed requests by the middleware and send to the socket
+*/
+export const socketMiddleware = url => store => {
+  const socket = createSocket(url, store.dispatch);
+  return next => action => {
+    typeof action.type === "string" &&
+    action.type.startsWith(`${SOCKET_STRING}/`)
+      ? socket.send(JSON.stringify(action))
+      : next(action);
+  };
+};
