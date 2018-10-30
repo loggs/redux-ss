@@ -12,8 +12,12 @@ const SOCKET_STRING = "socket";
   Create socket - takes a websocket url and a dispatch method
   and returns a socket
 */
-const createSocket = (url, dispatch) => {
+const createSocket = (url, initial, dispatch) => {
   const s = new WebSocket(url);
+
+  s.onopen = () => {
+    initial ? s.send(JSON.stringify(initial)) : null;
+  };
 
   s.onmessage = event => {
     const action = JSON.parse(event.data);
@@ -31,13 +35,14 @@ export const SEND_SOCKET = type => `${SOCKET_STRING}/${type}`;
 /*
   capture any socketed requests by the middleware and send to the socket
 */
-export const socketMiddleware = url => store => {
-  const socket = createSocket(url, store.dispatch);
+export const socketMiddleware = (url, initial) => store => {
+  const socket = createSocket(url, initial, store.dispatch);
   return next => action => {
     // Should we send this request to a socket
     const sendToSocket =
       typeof action.type === "string" &&
       action.type.startsWith(`${SOCKET_STRING}/`);
+
     // Should we modify the action
     const modAction = sendToSocket
       ? { ...action, type: action.type.replace(`${SOCKET_STRING}/`, "") }
