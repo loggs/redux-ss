@@ -5,8 +5,7 @@ const messages = (state = [], action) => {
       return state.concat([
         {
           message: action.message,
-          author: action.author,
-          id: action.id
+          author: action.author
         }
       ]);
     default:
