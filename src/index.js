@@ -34,9 +34,19 @@ export const SEND_SOCKET = type => `${SOCKET_STRING}/${type}`;
 export const socketMiddleware = url => store => {
   const socket = createSocket(url, store.dispatch);
   return next => action => {
-    typeof action.type === "string" &&
-    action.type.startsWith(`${SOCKET_STRING}/`)
-      ? socket.send(JSON.stringify(action))
-      : next(action);
+    // Should we send this request to a socket
+    const sendToSocket =
+      typeof action.type === "string" &&
+      action.type.startsWith(`${SOCKET_STRING}/`);
+    // Should we modify the action
+    const modAction = sendToSocket
+      ? { ...action, type: action.type.replace(`${SOCKET_STRING}/`, "") }
+      : action;
+
+    // If it should be sent to a socket then send it
+    sendToSocket ? socket.send(JSON.stringify(modAction)) : null;
+
+    // Otherwise continue on with the modified action
+    next(modAction);
   };
 };
