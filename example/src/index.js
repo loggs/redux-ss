@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
-import { socketMiddleware, socketCreate } from "redux-ss";
+import { socketMiddleware } from "redux-ss";
 
 import "./index.css";
 import App from "./App";
