@@ -31,7 +31,7 @@ const createSocket = (url, initial, dispatch) => {
   Create a specific wrapper for a type to define a socketed type
 */
 export const SEND_SOCKET = type => `${SOCKET_STRING}/${type}`;
-
+export const SEND_REDUCER = type => type.replace(`${SOCKET_STRING}/`, "");
 /*
   capture any socketed requests by the middleware and send to the socket
 */
@@ -45,7 +45,7 @@ export const socketMiddleware = (url, initial) => store => {
 
     // Should we modify the action
     const modAction = sendToSocket
-      ? { ...action, type: action.type.replace(`${SOCKET_STRING}/`, "") }
+      ? { ...action, type: SEND_REDUCER(action.type) }
       : action;
 
     // If it should be sent to a socket then send it
