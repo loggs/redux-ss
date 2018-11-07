@@ -13,17 +13,11 @@ npm install --save redux-ss
 ## Usage
 
 ```jsx
-import React, { Component } from 'react'
+Update middleware here
+```
 
-import MyComponent from 'redux-ss'
-
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
+```jsx
+Put stuff on the action
 ```
 
 ## License
