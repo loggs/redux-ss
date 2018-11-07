@@ -32,6 +32,7 @@ const createSocket = (url, initial, dispatch) => {
 */
 export const SEND_SOCKET = type => `${SOCKET_STRING}/${type}`;
 export const SEND_REDUCER = type => type.replace(`${SOCKET_STRING}/`, "");
+
 /*
   capture any socketed requests by the middleware and send to the socket
 */
