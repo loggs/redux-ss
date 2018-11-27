@@ -1,10 +1,11 @@
 # redux-ss
 
-Note: This is currently in experimentation mode to see if this design pattern makes any sense.
+[![NPM](https://img.shields.io/npm/v/redux-ss.svg)](https://www.npmjs.com/package/redux-ss) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+**Note: This is currently in experimentation mode to see if this design pattern makes any sense.**
 
 A simple, opinionated websocket interface for react-redux. The goal is to make any communication with the server look like an action that would be passed to the reducer. This makes writing websocket code for react-redux simpler in my opionion (hence **ss** for **s**imple **s**ocket).
 
-[![NPM](https://img.shields.io/npm/v/redux-ss.svg)](https://www.npmjs.com/package/redux-ss) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
