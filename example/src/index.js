@@ -12,8 +12,13 @@ import { addUser } from "./actions";
 
 const store = createStore(
   reducers,
-  { currentUser: username, messages: [], users: [] },
-  applyMiddleware(socketMiddleware("ws://localhost:8989", addUser(username)))
+  { currentUser: username, messages: [], users: [] }, // Initial state of the application
+  applyMiddleware(
+    socketMiddleware(
+      "ws://localhost:8989", // Set the ws url to use when creating the connection
+      addUser(username) // The initial action to send to the server
+    )
+  )
 );
 
 ReactDOM.render(
